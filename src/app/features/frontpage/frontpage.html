@@ -1,84 +1,130 @@
-@if (vm$ | async; as vm) {
-  <header>
-    <h1>{{ vm.title }}</h1>
-    <p>kontakt</p>
-    @if (vm.contact; as c) {
-      <address aria-label="Kontakt">
-        @if (c.name) { <div>{{ c.name }}</div> }
-        @if (c.email) { <div><a [href]="'mailto:'+c.email">{{ c.email }}</a></div> }
-        @if (c.phone) { <div><a [href]="'tel:'+c.phone">{{ c.phone }}</a></div> }
-      </address>
+@if (vmState$ | async; as state) {
+  @if (state.status === 'loaded') {
+    @let vm = state.data;
+    <header>
+      <div class="header__top">
+        <h1>{{ vm.title }}</h1>
+        @if (vm.languages.length > 1) {
+          <nav class="language-switcher" aria-label="Language selection">
+            @for (lang of vm.languages; track lang.code) {
+              <button
+                type="button"
+                (click)="onLanguageSelect(lang.code)"
+                [disabled]="translate.currentLang === lang.code"
+                [class.active]="translate.currentLang === lang.code"
+              >
+                {{ lang.code | uppercase }}
+              </button>
+            }
+          </nav>
+        }
+      </div>
+      @if (vm.contact; as c) {
+        <section aria-label="Kontakt" class="contact">
+          <h2>{{ ('frontpage.contact' | translate) || 'Kontakt' }}</h2>
+          <address>
+            @if (c.name) { <div>{{ c.name }}</div> }
+            @if (c.email) { <div><a [href]="'mailto:' + c.email">{{ c.email }}</a></div> }
+            @if (c.phone) { <div><a [href]="'tel:' + c.phone">{{ c.phone }}</a></div> }
+          </address>
+        </section>
+      }
+    </header>
+
+    @if (vm.news) {
+      <section>
+        <h2>{{ 'frontpage.news' | translate }}</h2>
+        @if (vm.news.routed) {
+          <a [routerLink]="vm.news.url">{{ vm.news.title }}</a>
+        } @else {
+          <a [href]="vm.news.url">{{ vm.news.title }}</a>
+        }
+      </section>
     }
-  </header>
 
-  <p>uudised</p>
-  @if (vm.news) {
-    <section>
-      <h2>{{ 'frontpage.news' | translate }}</h2>
-      <a [routerLink]="vm.news!.path">{{ vm.news!.title }}</a>
-    </section>
-  }
+    @if (vm.descriptionHtml) {
+      <section>
+        <div [innerHTML]="vm.descriptionHtml"></div>
+      </section>
+    }
 
-  <p>kirjeldus</p>
-  @if (vm.descriptionHtml) {
-    <section>
-      <div [innerHTML]="vm.descriptionHtml"></div>
-    </section>
-  }
+    @if (vm.services.length) {
+      <section>
+        <h2>{{ 'frontpage.services' | translate }}</h2>
+        <div class="grid">
+          @for (s of vm.services; track s.title) {
+            <article>
+              @if (s.img) { <img [src]="s.img" [alt]="s.alt || s.title" /> }
+              <h3>{{ s.title }}</h3>
+              @if (s.content) { <p>{{ s.content }}</p> }
+              @if (s.link) {
+                @if (s.link.routed) {
+                  <a [routerLink]="s.link.url">
+                    {{ s.link.title || ('buttons.read_more' | translate) }}
+                  </a>
+                } @else {
+                  <a [href]="s.link.url">
+                    {{ s.link.title || ('buttons.read_more' | translate) }}
+                  </a>
+                }
+              }
+            </article>
+          }
+        </div>
+      </section>
+    }
 
-  <p>teenused</p>
-  @if (vm.services.length) {
-    <section>
-      <h2>{{ 'frontpage.services' | translate }}</h2>
-      <div class="grid">
-        @for (s of vm.services; track s.title) {
-          <article>
-            @if (s.img) { <img [src]="s.img" [alt]="s.alt || s.title" /> }
-            <h3>{{ s.title }}</h3>
-            @if (s.content) { <p>{{ s.content }}</p> }
-            @if (s.linkPath) {
-              <a [routerLink]="s.linkPath">
-                {{ s.linkTitle || ('buttons.read_more' | translate) }}
-              </a>
+    @if (vm.topics.length) {
+      <section>
+        <h2>{{ 'frontpage.topics' | translate }}</h2>
+        <div class="chips">
+          @for (t of vm.topics; track t.url) {
+            @if (t.routed) {
+              <a [routerLink]="t.url">{{ t.title }}</a>
+            } @else {
+              <a [href]="t.url">{{ t.title }}</a>
             }
-          </article>
-        }
-      </div>
-    </section>
-  }
+          }
+        </div>
+      </section>
+    }
 
-  <p>teemad</p>
-  @if (vm.topics.length) {
-    <section>
-      <h2>{{ 'frontpage.topics' | translate }}</h2>
-      <div class="chips">
-        @for (t of vm.topics; track t.path) {
-          <a [routerLink]="t.path">{{ t.title }}</a>
-        }
-      </div>
+    @if (vm.links.length) {
+      <section>
+        <h2>{{ 'frontpage.links' | translate }}</h2>
+        <div class="grid">
+          @for (l of vm.links; track l.link?.url ?? l.title ?? $index) {
+            <article>
+              @if (l.img) { <img [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" /> }
+              @if (l.title) { <h3>{{ l.title }}</h3> }
+              @if (l.desc) { <p>{{ l.desc }}</p> }
+              @if (l.link) {
+                @if (l.link.routed) {
+                  <a [routerLink]="l.link.url">
+                    {{ 'buttons.read_more' | translate }}
+                  </a>
+                } @else {
+                  <a
+                    [href]="l.link.url"
+                    [attr.target]="l.link.url.startsWith('http') ? '_blank' : null"
+                    rel="noopener"
+                  >
+                    {{ 'buttons.read_more' | translate }}
+                  </a>
+                }
+              }
+            </article>
+          }
+        </div>
+      </section>
+    }
+  } @else if (state.status === 'error') {
+    <section class="state state-error" role="alert">
+      <p>{{ ('frontpage.errors.loadFailed' | translate) || 'Sisuhaldusest ei õnnestunud andmeid laadida.' }}</p>
+    </section>
+  } @else {
+    <section class="state state-loading" aria-busy="true">
+      <p>{{ ('common.loading' | translate) || 'Laadimine…' }}</p>
     </section>
   }
-
-  <p>lingid</p>
-  @if (vm.links.length) {
-    <section>
-      <h2>{{ 'frontpage.links' | translate }}</h2>
-      <div class="grid">
-        @for (l of vm.links; track l.href ?? l.title ?? $index) {
-          <article>
-            @if (l.img) { <img [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" /> }
-            @if (l.title) { <h3>{{ l.title }}</h3> }
-            @if (l.desc) { <p>{{ l.desc }}</p> }
-            @if (l.href) {
-              <a [href]="l.href" [attr.target]="l.href.startsWith('http') ? '_blank' : null" rel="noopener">
-                {{ 'buttons.read_more' | translate }}
-              </a>
-            }
-          </article>
-        }
-      </div>
-    </section>
-  }
-} @else {
-  <!-- optional: loading / skeleton -->
 }

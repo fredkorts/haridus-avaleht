@@ -34,12 +34,19 @@ export interface FrontpageApi {
   language_links?: Record<'et'|'en'|string, LangLink>;
 }
 
+export interface FrontpageLinkVM {
+  title: string;
+  url: string;
+  routed: boolean;
+}
+
 export interface FrontpageVM {
   title: string;
   contact: { name?: string; email?: string; phone?: string } | null;
-  news: { title: string; path: string } | null;
+  news: FrontpageLinkVM | null;
   descriptionHtml?: string;
-  services: Array<{ title: string; content?: string; img?: string; alt?: string; linkTitle?: string; linkPath?: string }>;
-  topics: Array<{ title: string; path: string }>;
-  links: Array<{ title?: string; desc?: string; img?: string; alt?: string; href?: string }>;
+  services: Array<{ title: string; content?: string; img?: string; alt?: string; link?: FrontpageLinkVM }>;
+  topics: Array<FrontpageLinkVM>;
+  links: Array<{ title?: string; desc?: string; img?: string; alt?: string; link?: FrontpageLinkVM }>;
+  languages: Array<{ code: string; active: boolean; path?: string }>;
 }
