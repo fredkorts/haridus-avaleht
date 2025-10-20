@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LANGUAGE_STORAGE_KEY } from './core/constants/storage.constants';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +13,31 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
   private t = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
   constructor() {
-    this.t.addLangs(['et']);   // ET only for now
-    this.t.use('et');
+    const fallback = 'et';
+    const stored = this.readStoredLang();
+
+    this.t.addLangs([fallback]);
+    this.t.setDefaultLang(fallback);
+    this.t.use(stored || fallback);
+
+    this.t.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event: LangChangeEvent) => {
+        try {
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, event.lang);
+        } catch {
+          // ignore storage failures (Safari private mode etc.)
+        }
+      });
+  }
+
+  private readStoredLang(): string | null {
+    try {
+      return localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    } catch {
+      return null;
+    }
   }
 }

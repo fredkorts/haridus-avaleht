@@ -1,19 +1,38 @@
-import { FrontpageApi, FrontpageVM } from '../../core/models/frontpage.types';
+import { FrontpageApi, FrontpageLinkVM, FrontpageVM } from '../../core/models/frontpage.types';
+
+function sortedValues<T>(v?: Record<string, T> | Array<T>): Array<T> {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  return Object.keys(v)
+    .sort((a, b) => a.localeCompare(b))
+    .map(key => (v as Record<string, T>)[key]);
+}
 
 function first<T>(v?: Record<string, T> | Array<T>): T | undefined {
-  if (!v) return undefined;
-  if (Array.isArray(v)) return v[0];
-  const k = Object.keys(v)[0];
-  return k ? (v as Record<string, T>)[k] : undefined;
+  return sortedValues(v)[0];
+}
+
+function normalizeLink(link?: { title?: string; path?: string; routed?: boolean } | null): FrontpageLinkVM | undefined {
+  if (!link?.path) return undefined;
+  const url = link.path;
+  const routed = Boolean(link.routed && !/^https?:/i.test(url));
+  return { title: link.title || '', url, routed };
+}
+
+function normalizeEntityLink(link?: { title?: string; entityUrl?: { path: string; routed: boolean } }): FrontpageLinkVM | undefined {
+  const path = link?.entityUrl?.path;
+  if (!path) return undefined;
+  const routed = Boolean(link?.entityUrl?.routed && !/^https?:/i.test(path));
+  return { title: link?.title || '', url: path, routed };
 }
 
 export function mapFrontpage(api: FrontpageApi): FrontpageVM {
   const c = api.content ?? ({} as FrontpageApi['content']);
 
   const newsAllowed = c.fieldFrontpageNewsAllowed === '1';
-  const newsItem = newsAllowed ? c.fieldFrontpageNews?.[0] : undefined;
+  const newsItem = newsAllowed ? first(c.fieldFrontpageNews) : undefined;
 
-  const services = Object.values(c.fieldFrontpageServices ?? {}).map(s => {
+  const services = sortedValues(c.fieldFrontpageServices).map(s => {
     const imgContainer = first(s.fieldServiceImage);
     const imgFile = imgContainer?.fieldServiceImg && first(imgContainer.fieldServiceImg);
     return {
@@ -21,32 +40,41 @@ export function mapFrontpage(api: FrontpageApi): FrontpageVM {
       content: s.fieldServiceContent,
       img: imgFile?.url,
       alt: imgContainer?.fieldAlt,
-      linkTitle: s.fieldServiceLink?.[0]?.title,
-      linkPath: s.fieldServiceLink?.[0]?.path
+      link: normalizeLink(first(s.fieldServiceLink))
     };
   });
 
-  const topics = Object.values(c.fieldFrontpageTopics ?? {})
-    .map(t => t.fieldTopicLink?.[0])
-    .filter(Boolean) as Array<{ title: string; path: string }>;
+  const topics = sortedValues(c.fieldFrontpageTopics)
+    .map(t => normalizeLink(first(t.fieldTopicLink)))
+    .filter((link): link is FrontpageLinkVM => Boolean(link?.url));
 
-  const links = Object.values(c.fieldLinkCards ?? {}).map(l => ({
+  const links = sortedValues(c.fieldLinkCards).map(l => ({
     title: l.fieldTitle,
     desc: l.fieldDescription,
     img: l.fieldMediaImg?.[0]?.url,
     alt: l.fieldMediaImg?.[0]?.alt,
-    href: l.fieldSingleLink?.[0]?.path
+    link: normalizeLink(first(l.fieldSingleLink))
   }));
+
+  const languages = Object.values(api.language_links ?? {})
+    .sort((a, b) => (a.langcode || '').localeCompare(b.langcode || ''))
+    .map(l => ({
+      code: l.langcode,
+      active: Boolean(l.active),
+      path: l.path
+    }))
+    .filter(l => Boolean(l.code));
 
   return {
     title: c.title || 'Avaleht',
     contact: (c.fieldFrontpageContactEmail || c.fieldFrontpageContactName || c.fieldFrontpageContactPhone)
       ? { name: c.fieldFrontpageContactName, email: c.fieldFrontpageContactEmail, phone: c.fieldFrontpageContactPhone }
       : null,
-    news: newsItem?.entityUrl?.path ? { title: newsItem.title, path: newsItem.entityUrl.path } : null,
+    news: newsItem ? normalizeEntityLink(newsItem) ?? null : null,
     descriptionHtml: c.fieldFrontpageNewsDescription,
     services,
     topics,
-    links
+    links,
+    languages
   };
 }
