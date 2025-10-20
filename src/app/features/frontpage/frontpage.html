@@ -1,54 +1,84 @@
-<ng-container *ngIf="vm$ | async as vm">
+@if (vm$ | async; as vm) {
   <header>
     <h1>{{ vm.title }}</h1>
-    <address *ngIf="vm.contact as c" aria-label="Kontakt">
-      <div *ngIf="c.name">{{ c.name }}</div>
-      <div *ngIf="c.email"><a [href]="'mailto:'+c.email">{{ c.email }}</a></div>
-      <div *ngIf="c.phone"><a [href]="'tel:'+c.phone">{{ c.phone }}</a></div>
-    </address>
+    <p>kontakt</p>
+    @if (vm.contact; as c) {
+      <address aria-label="Kontakt">
+        @if (c.name) { <div>{{ c.name }}</div> }
+        @if (c.email) { <div><a [href]="'mailto:'+c.email">{{ c.email }}</a></div> }
+        @if (c.phone) { <div><a [href]="'tel:'+c.phone">{{ c.phone }}</a></div> }
+      </address>
+    }
   </header>
 
-  <section *ngIf="vm.news">
-    <h2>{{ 'frontpage.news' | translate }}</h2>
-    <a [routerLink]="vm.news.path">{{ vm.news.title }}</a>
-  </section>
+  <p>uudised</p>
+  @if (vm.news) {
+    <section>
+      <h2>{{ 'frontpage.news' | translate }}</h2>
+      <a [routerLink]="vm.news!.path">{{ vm.news!.title }}</a>
+    </section>
+  }
 
-  <section *ngIf="vm.descriptionHtml">
-    <div [innerHTML]="vm.descriptionHtml"></div> <!-- trusted demo content -->
-  </section>
+  <p>kirjeldus</p>
+  @if (vm.descriptionHtml) {
+    <section>
+      <div [innerHTML]="vm.descriptionHtml"></div>
+    </section>
+  }
 
-  <section *ngIf="vm.services?.length">
-    <h2>{{ 'frontpage.services' | translate }}</h2>
-    <div class="grid">
-      <article *ngFor="let s of vm.services">
-        <img *ngIf="s.img" [src]="s.img" [alt]="s.alt || s.title" />
-        <h3>{{ s.title }}</h3>
-        <p *ngIf="s.content">{{ s.content }}</p>
-        <a *ngIf="s.linkPath" [routerLink]="s.linkPath">
-          {{ s.linkTitle || ('buttons.read_more' | translate) }}
-        </a>
-      </article>
-    </div>
-  </section>
+  <p>teenused</p>
+  @if (vm.services.length) {
+    <section>
+      <h2>{{ 'frontpage.services' | translate }}</h2>
+      <div class="grid">
+        @for (s of vm.services; track s.title) {
+          <article>
+            @if (s.img) { <img [src]="s.img" [alt]="s.alt || s.title" /> }
+            <h3>{{ s.title }}</h3>
+            @if (s.content) { <p>{{ s.content }}</p> }
+            @if (s.linkPath) {
+              <a [routerLink]="s.linkPath">
+                {{ s.linkTitle || ('buttons.read_more' | translate) }}
+              </a>
+            }
+          </article>
+        }
+      </div>
+    </section>
+  }
 
-  <section *ngIf="vm.topics?.length">
-    <h2>{{ 'frontpage.topics' | translate }}</h2>
-    <div class="chips">
-      <a *ngFor="let t of vm.topics" [routerLink]="t.path">{{ t.title }}</a>
-    </div>
-  </section>
+  <p>teemad</p>
+  @if (vm.topics.length) {
+    <section>
+      <h2>{{ 'frontpage.topics' | translate }}</h2>
+      <div class="chips">
+        @for (t of vm.topics; track t.path) {
+          <a [routerLink]="t.path">{{ t.title }}</a>
+        }
+      </div>
+    </section>
+  }
 
-  <section *ngIf="vm.links?.length">
-    <h2>{{ 'frontpage.links' | translate }}</h2>
-    <div class="grid">
-      <article *ngFor="let l of vm.links">
-        <img *ngIf="l.img" [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" />
-        <h3 *ngIf="l.title">{{ l.title }}</h3>
-        <p *ngIf="l.desc">{{ l.desc }}</p>
-        <a *ngIf="l.href" [href]="l.href" [attr.target]="l.href.startsWith('http') ? '_blank' : null" rel="noopener">
-          {{ 'buttons.read_more' | translate }}
-        </a>
-      </article>
-    </div>
-  </section>
-</ng-container>
+  <p>lingid</p>
+  @if (vm.links.length) {
+    <section>
+      <h2>{{ 'frontpage.links' | translate }}</h2>
+      <div class="grid">
+        @for (l of vm.links; track l.href ?? l.title ?? $index) {
+          <article>
+            @if (l.img) { <img [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" /> }
+            @if (l.title) { <h3>{{ l.title }}</h3> }
+            @if (l.desc) { <p>{{ l.desc }}</p> }
+            @if (l.href) {
+              <a [href]="l.href" [attr.target]="l.href.startsWith('http') ? '_blank' : null" rel="noopener">
+                {{ 'buttons.read_more' | translate }}
+              </a>
+            }
+          </article>
+        }
+      </div>
+    </section>
+  }
+} @else {
+  <!-- optional: loading / skeleton -->
+}
