@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LANGUAGE_STORAGE_KEY } from './core/constants/storage.constants';
+import { NavigationComponent } from './core/components/navigation/navigation';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavigationComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
