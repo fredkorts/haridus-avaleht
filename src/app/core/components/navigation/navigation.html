@@ -1,0 +1,28 @@
+<button
+  type="button"
+  class="nav-toggle"
+  (click)="toggleNav()"
+  [attr.aria-expanded]="isOpen"
+  aria-controls="primary-navigation"
+  aria-label="Vaheta menüü olekut"
+>
+  <span class="toggle-icon" [class.is-open]="isOpen" aria-hidden="true"></span>
+  <span class="sr-only">Ava või sulge menüü</span>
+</button>
+
+<nav id="primary-navigation" class="nav-panel" [class.is-open]="isOpen" aria-label="Põhimenüü">
+  <ul>
+    <li>
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="handleLinkSelection()"
+        >Avaleht</a
+      >
+    </li>
+    <li>
+      <a routerLink="/test" routerLinkActive="active" (click)="handleLinkSelection()">Test</a>
+    </li>
+  </ul>
+</nav>
