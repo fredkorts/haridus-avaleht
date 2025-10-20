@@ -1,0 +1,54 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <header>
+    <h1>{{ vm.title }}</h1>
+    <address *ngIf="vm.contact as c" aria-label="Kontakt">
+      <div *ngIf="c.name">{{ c.name }}</div>
+      <div *ngIf="c.email"><a [href]="'mailto:'+c.email">{{ c.email }}</a></div>
+      <div *ngIf="c.phone"><a [href]="'tel:'+c.phone">{{ c.phone }}</a></div>
+    </address>
+  </header>
+
+  <section *ngIf="vm.news">
+    <h2>{{ 'frontpage.news' | translate }}</h2>
+    <a [routerLink]="vm.news.path">{{ vm.news.title }}</a>
+  </section>
+
+  <section *ngIf="vm.descriptionHtml">
+    <div [innerHTML]="vm.descriptionHtml"></div> <!-- trusted demo content -->
+  </section>
+
+  <section *ngIf="vm.services?.length">
+    <h2>{{ 'frontpage.services' | translate }}</h2>
+    <div class="grid">
+      <article *ngFor="let s of vm.services">
+        <img *ngIf="s.img" [src]="s.img" [alt]="s.alt || s.title" />
+        <h3>{{ s.title }}</h3>
+        <p *ngIf="s.content">{{ s.content }}</p>
+        <a *ngIf="s.linkPath" [routerLink]="s.linkPath">
+          {{ s.linkTitle || ('buttons.read_more' | translate) }}
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section *ngIf="vm.topics?.length">
+    <h2>{{ 'frontpage.topics' | translate }}</h2>
+    <div class="chips">
+      <a *ngFor="let t of vm.topics" [routerLink]="t.path">{{ t.title }}</a>
+    </div>
+  </section>
+
+  <section *ngIf="vm.links?.length">
+    <h2>{{ 'frontpage.links' | translate }}</h2>
+    <div class="grid">
+      <article *ngFor="let l of vm.links">
+        <img *ngIf="l.img" [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" />
+        <h3 *ngIf="l.title">{{ l.title }}</h3>
+        <p *ngIf="l.desc">{{ l.desc }}</p>
+        <a *ngIf="l.href" [href]="l.href" [attr.target]="l.href.startsWith('http') ? '_blank' : null" rel="noopener">
+          {{ 'buttons.read_more' | translate }}
+        </a>
+      </article>
+    </div>
+  </section>
+</ng-container>
