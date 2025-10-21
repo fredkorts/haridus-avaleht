@@ -1,0 +1,61 @@
+@use './design-tokens' as tokens;
+
+@mixin respond-above($name) {
+  $value: tokens.breakpoint-up($name);
+
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn 'Unknown breakpoint `#{$name}`';
+  }
+}
+
+@mixin respond-below($name) {
+  $value: tokens.breakpoint-down($name);
+
+  @if $value {
+    @media (max-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn 'Unknown breakpoint `#{$name}`';
+  }
+}
+
+@mixin card-surface($radius: var(--radius-lg)) {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: $radius;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base), box-shadow var(--transition-base),
+    background-color var(--transition-base), color var(--transition-base);
+}
+
+@mixin card-hover($translate: -4px, $shadow: var(--shadow-card-hover)) {
+  &:hover,
+  &:focus-visible {
+    transform: translateY($translate);
+    box-shadow: $shadow;
+  }
+}
+
+@mixin inline-link($weight: 500) {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: $weight;
+  transition: color var(--transition-base), text-decoration-color var(--transition-base);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+}
+
+@mixin section-line-fill($color) {
+  .section-line svg path {
+    fill: $color;
+  }
+}

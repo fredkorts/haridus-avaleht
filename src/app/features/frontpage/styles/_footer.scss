@@ -1,0 +1,67 @@
+@use '../../../styles/mixins' as mixins;
+
+.footer-section {
+  position: relative;
+  background-color: var(--color-footer);
+  padding: 3rem 0;
+  color: #ffffff;
+
+  @include mixins.section-line-fill(var(--color-footer));
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.footer-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.footer-contact__item {
+  font-size: 1rem;
+  line-height: 1.5;
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity var(--transition-base);
+
+    &:hover,
+    &:focus-visible {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+@include mixins.respond-above(md) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .footer-contact {
+    align-items: flex-end;
+    text-align: right;
+  }
+}

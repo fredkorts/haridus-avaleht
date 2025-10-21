@@ -1,3 +1,5 @@
+@use '../styles/mixins' as mixins;
+
 :host {
   display: block;
   min-height: 100vh;
@@ -6,8 +8,8 @@
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: #f4f6fb;
-  color: #1c1c1c;
+  background: var(--color-background);
+  color: var(--color-text);
 }
 
 .content-wrapper {
@@ -15,15 +17,14 @@
   display: flex;
   flex-direction: column;
   min-width: 0; // Prevents flex item from overflowing
-  
-  // Add left margin on desktop to account for sidebar
-  @media (min-width: 1025px) {
+
+  @include mixins.respond-above(lg) {
     margin-left: 96px;
   }
 }
 
 .app-header {
-  background: #bee3e8;
+  background: var(--color-accent);
   position: sticky;
   top: 0;
   z-index: 1100;
@@ -39,7 +40,6 @@
   padding: 1rem;
 }
 
-// Hamburger toggle button (mobile only)
 .nav-toggle {
   display: flex;
   align-items: center;
@@ -57,18 +57,16 @@
     background: rgba(0, 0, 0, 0.05);
   }
 
-  // Hide on desktop
-  @media (min-width: 1025px) {
+  @include mixins.respond-above(lg) {
     display: none;
   }
 }
 
-// Hamburger icon
 .toggle-icon {
   display: block;
   width: 24px;
   height: 2px;
-  background: #1c1c1c;
+  background: var(--color-text);
   position: relative;
   transition: background 0.3s ease;
 
@@ -78,7 +76,7 @@
     display: block;
     width: 24px;
     height: 2px;
-    background: #1c1c1c;
+    background: var(--color-text);
     position: absolute;
     left: 0;
     transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease;
@@ -92,7 +90,6 @@
     bottom: -8px;
   }
 
-  // X animation when open
   &.is-open {
     background: transparent;
 
@@ -108,7 +105,6 @@
   }
 }
 
-// Screen reader only text
 .sr-only {
   position: absolute;
   width: 1px;
@@ -126,7 +122,7 @@
   height: 24px;
   position: relative;
   z-index: 1200;
-  
+
   img {
     height: 100%;
     width: auto;
@@ -138,14 +134,14 @@
   width: 100%;
   margin: 0 auto;
   position: relative;
-  background: #f4f6fb;
-  
-  @media (min-width: 1025px) {
+  background: var(--color-background);
+
+  @include mixins.respond-above(lg) {
     max-width: calc(100vw - 96px);
   }
 }
 
-@media (max-width: 1024px) {
+@include mixins.respond-below(lg) {
   .header-content {
     padding: 0.75rem 1rem;
   }

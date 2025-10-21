@@ -1,0 +1,56 @@
+@use 'sass:map';
+
+$breakpoints-up: (
+  sm: 600px,
+  md: 768px,
+  lg: 1025px,
+  xl: 1280px
+);
+
+$breakpoints-down: (
+  sm: 599px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1279px
+);
+
+@function breakpoint-up($name) {
+  @return map.get($breakpoints-up, $name);
+}
+
+@function breakpoint-down($name) {
+  @return map.get($breakpoints-down, $name);
+}
+
+:root {
+  --gap: 1rem;
+  --gap-lg: 2rem;
+  --container-max-width: 1100px;
+
+  --color-background: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f5f5;
+  --color-surface-alt: #eeeeee;
+  --color-border-subtle: #e0e0e0;
+  --color-text: #1c1c1c;
+  --color-text-muted: #666666;
+  --color-heading: #1a1a1a;
+  --color-accent: #bee3e8;
+  --color-primary: #0066cc;
+  --color-primary-dark: #0052a3;
+  --color-footer: #383a45;
+  --color-focus: #1e90ff;
+  --color-error-text: #842029;
+  --color-error-bg: #f8d7da;
+  --color-error-border: #f5c2c7;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.875rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 2px 4px rgba(15, 23, 42, 0.08);
+  --shadow-card-hover: 0 12px 24px rgba(15, 23, 42, 0.16);
+
+  --transition-base: 0.2s ease;
+}
