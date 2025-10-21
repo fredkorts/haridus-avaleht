@@ -13,4 +13,9 @@
       <a routerLink="/test" routerLinkActive="active" (click)="handleLinkSelection()">Test</a>
     </li>
   </ul>
+  <div class="nav-actions">
+    <button type="button" class="theme-toggle" (click)="toggleTheme()">
+      {{ themeLabel() }}
+    </button>
+  </div>
 </nav>
