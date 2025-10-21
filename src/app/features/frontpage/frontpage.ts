@@ -1,4 +1,4 @@
-import { Component, SecurityContext, inject } from '@angular/core';
+import { Component, SecurityContext, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -25,6 +25,8 @@ export class FrontpageComponent {
   private svc = inject(FrontpageService);
   protected translate = inject(TranslateService);
   private sanitizer = inject(DomSanitizer);
+
+  @ViewChild('servicesScroller') servicesScroller?: ElementRef<HTMLElement>;
 
   readonly vmState$: Observable<FrontpageState> = this.svc.getFrontpage().pipe(
     map(mapFrontpage),
@@ -81,5 +83,21 @@ export class FrontpageComponent {
     if (target && this.translate.currentLang !== target) {
       this.translate.use(target);
     }
+  }
+
+  scrollServices(direction: 'left' | 'right') {
+    const scroller = this.servicesScroller?.nativeElement;
+    if (!scroller) return;
+
+    const scrollAmount = scroller.offsetWidth * 0.8; // Scroll 80% of container width
+    const currentScroll = scroller.scrollLeft;
+    const targetScroll = direction === 'left' 
+      ? currentScroll - scrollAmount 
+      : currentScroll + scrollAmount;
+
+    scroller.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
   }
 }

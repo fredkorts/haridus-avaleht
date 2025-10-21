@@ -1,6 +1,26 @@
 <div class="app-shell">
-  <app-navigation></app-navigation>
-  <main class="app-content">
-    <router-outlet></router-outlet>
-  </main>
+  <app-navigation [isOpen]="isNavOpen"></app-navigation>
+  <div class="content-wrapper">
+    <header class="app-header">
+      <div class="header-content">
+        <button
+          type="button"
+          class="nav-toggle"
+          (click)="toggleNav()"
+          [attr.aria-expanded]="isNavOpen"
+          aria-controls="primary-navigation"
+          aria-label="Vaheta menüü olekut"
+        >
+          <span class="toggle-icon" [class.is-open]="isNavOpen" aria-hidden="true"></span>
+          <span class="sr-only">Ava või sulge menüü</span>
+        </button>
+        <a aria-label="edu.ee" class="logo" href="/">
+          <img aria-hidden="true" alt="edu.ee logo" src="/edu_logo.svg">
+        </a>
+      </div>
+    </header>
+    <main class="app-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

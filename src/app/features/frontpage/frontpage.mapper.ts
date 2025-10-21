@@ -48,12 +48,22 @@ export function mapFrontpage(api: FrontpageApi): FrontpageVM {
     .map(t => normalizeLink(first(t.fieldTopicLink)))
     .filter((link): link is FrontpageLinkVM => Boolean(link?.url));
 
-  const links = sortedValues(c.fieldLinkCards).map(l => ({
-    title: l.fieldTitle,
-    desc: l.fieldDescription,
-    img: l.fieldMediaImg?.[0]?.url,
-    alt: l.fieldMediaImg?.[0]?.alt,
-    link: normalizeLink(first(l.fieldSingleLink))
+  const links = sortedValues(c.fieldLinkCards).map(l => {
+    const img = l.fieldMediaImg?.[0];
+    return {
+      title: l.fieldTitle,
+      desc: l.fieldDescription,
+      img: img?.url,
+      alt: img?.alt,
+      link: normalizeLink(first(l.fieldSingleLink))
+    };
+  });
+
+  const references = sortedValues(c.fieldFrontpageReferences).map(r => ({
+    title: r.fieldReferenceTitle,
+    questionTitle: r.fieldReferenceQuestionTitle,
+    content: r.fieldReferenceContent,
+    link: r.fieldReferenceLink ? normalizeLink(first(r.fieldReferenceLink)) : undefined
   }));
 
   const languages = Object.values(api.language_links ?? {})
@@ -75,6 +85,7 @@ export function mapFrontpage(api: FrontpageApi): FrontpageVM {
     services,
     topics,
     links,
+    references,
     languages
   };
 }

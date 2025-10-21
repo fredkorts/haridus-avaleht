@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,8 +13,16 @@ import { NavigationComponent } from './core/components/navigation/navigation';
   styleUrl: './app.scss',
 })
 export class AppComponent {
+  @ViewChild(NavigationComponent) navigation?: NavigationComponent;
   private t = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  
+  isNavOpen = false;
+  
+  toggleNav(): void {
+    this.isNavOpen = !this.isNavOpen;
+    this.navigation?.toggleNav();
+  }
   constructor() {
     const fallback = 'et';
     const stored = this.readStoredLang();

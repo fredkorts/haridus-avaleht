@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './navigation.scss',
 })
 export class NavigationComponent {
-  protected isOpen = false;
+  @Input() isOpen = false;
   private readonly mobileBreakpoint = 1025;
 
   toggleNav(): void {

@@ -27,8 +27,15 @@ export interface FrontpageApi {
     fieldLinkCards?: Record<string, {
       fieldTitle?: string;
       fieldDescription?: string;
-      fieldMediaImg?: Array<{ url: string; alt?: string }>;
+      fieldMediaImg?: Array<{ url: string; alt?: string; title?: string }>;
       fieldSingleLink?: Array<{ title?: string; path?: string; routed?: boolean }>;
+    }>;
+    fieldFrontpageReferences?: Record<string, {
+      fieldReferenceTitle?: string;
+      fieldReferenceQuestionTitle?: string;
+      fieldReferenceContent?: string;
+      fieldReferenceLink?: Array<{ title?: string; path?: string; routed?: boolean }> | null;
+      paraType?: string;
     }>;
   };
   language_links?: Record<'et'|'en'|string, LangLink>;
@@ -48,5 +55,6 @@ export interface FrontpageVM {
   services: Array<{ title: string; content?: string; img?: string; alt?: string; link?: FrontpageLinkVM }>;
   topics: Array<FrontpageLinkVM>;
   links: Array<{ title?: string; desc?: string; img?: string; alt?: string; link?: FrontpageLinkVM }>;
+  references: Array<{ title?: string; questionTitle?: string; content?: string; link?: FrontpageLinkVM }>;
   languages: Array<{ code: string; active: boolean; path?: string }>;
 }
