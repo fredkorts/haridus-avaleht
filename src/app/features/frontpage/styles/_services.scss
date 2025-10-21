@@ -1,0 +1,163 @@
+@use '../../../styles/mixins' as mixins;
+
+.services-section {
+  margin: 2rem 0;
+  background-color: var(--color-surface);
+  padding: 60px 0 110px;
+
+  @include mixins.section-line-fill(var(--color-surface));
+}
+
+.slides-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slides-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slides-scroller {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slides-card {
+  flex: 0 0 auto;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+
+  @include mixins.card-surface();
+  @include mixins.card-hover();
+}
+
+.slides-card__image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--color-surface-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.slides-card__body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.slides-card__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-heading);
+}
+
+.slides-card__text {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.slides-card__link {
+  display: inline-block;
+  margin-top: auto;
+
+  @include mixins.inline-link();
+}
+
+.slides-arrow {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base);
+  z-index: 10;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--color-surface-muted);
+    border-color: #999;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+@include mixins.respond-below(lg) {
+  .slides-arrow {
+    display: flex;
+  }
+
+  .slides-scroller {
+    padding: 0 0.5rem;
+  }
+
+  .slides-card {
+    width: min(280px, 80vw);
+  }
+}
+
+@include mixins.respond-above(lg) {
+  .slides-wrapper {
+    gap: 0;
+  }
+
+  .slides-scroller {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .slides-card {
+    flex: 1 1 336px;
+    min-width: 0;
+  }
+
+  .slides-arrow {
+    display: none;
+  }
+}
