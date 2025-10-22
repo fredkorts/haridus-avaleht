@@ -1,4 +1,5 @@
 import { FrontpageApi, FrontpageLinkVM, FrontpageVM } from '../../core/models/frontpage.types';
+import { FRONTPAGE_DEFAULT_TITLE } from './frontpage.constants';
 
 function sortedValues<T>(v?: Record<string, T> | Array<T>): Array<T> {
   if (!v) return [];
@@ -76,7 +77,7 @@ export function mapFrontpage(api: FrontpageApi): FrontpageVM {
     .filter(l => Boolean(l.code));
 
   return {
-    title: c.title || 'Avaleht',
+    title: c.title || FRONTPAGE_DEFAULT_TITLE,
     contact: (c.fieldFrontpageContactEmail || c.fieldFrontpageContactName || c.fieldFrontpageContactPhone)
       ? { name: c.fieldFrontpageContactName, email: c.fieldFrontpageContactEmail, phone: c.fieldFrontpageContactPhone }
       : null,

@@ -8,6 +8,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, shareReplay } from 'rxjs';
 import { environment } from '../environments/environment';
 import { API_BASE_URL } from './core/config/api-tokens';
+import {
+  DEFAULT_LANGUAGE,
+  FALLBACK_LANGUAGE,
+  I18N_LOG_NAMESPACE,
+  I18N_MISSING_NAMESPACE,
+  TRANSLATIONS_ENDPOINT,
+} from './core/constants/i18n.constants';
 
 // Custom loader since TranslateHttpLoader v17 constructor signature changed
 class CustomTranslateLoader implements TranslateLoader {
@@ -22,16 +29,16 @@ class CustomTranslateLoader implements TranslateLoader {
       
       // Try language-specific endpoint first, fall back to general endpoint
       const request$ = this.http
-        .get(`${baseUrl}/translations`, { params: { _format: 'json', lang } })
+        .get(`${baseUrl}/${TRANSLATIONS_ENDPOINT}`, { params: { _format: 'json', lang } })
         .pipe(
           catchError(err => {
             // If language-specific request fails, try without lang parameter
-            console.warn(`[i18n] failed to load translations for ${lang}, trying without lang parameter`, err);
+            console.warn(`${I18N_LOG_NAMESPACE} failed to load translations for ${lang}, trying without lang parameter`, err);
             return this.http
-              .get(`${baseUrl}/translations`, { params: { _format: 'json' } })
+              .get(`${baseUrl}/${TRANSLATIONS_ENDPOINT}`, { params: { _format: 'json' } })
               .pipe(
                 catchError(fallbackErr => {
-                  console.error('[i18n] failed to load translations', fallbackErr);
+                  console.error(`${I18N_LOG_NAMESPACE} failed to load translations`, fallbackErr);
                   return of({});
                 })
               );
@@ -51,7 +58,10 @@ function httpLoaderFactory(http: HttpClient, apiBaseUrl: string) {
 }
 
 class LogMissing implements MissingTranslationHandler {
-  handle(params: MissingTranslationHandlerParams) { console.warn('[i18n missing]', params.key); return ''; }
+  handle(params: MissingTranslationHandlerParams) {
+    console.warn(I18N_MISSING_NAMESPACE, params.key);
+    return '';
+  }
 }
 
 export const appConfig: ApplicationConfig = {
@@ -61,8 +71,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     importProvidersFrom(
       TranslateModule.forRoot({
-        defaultLanguage: 'et',
-        fallbackLang: 'et',
+        defaultLanguage: DEFAULT_LANGUAGE,
+        fallbackLang: FALLBACK_LANGUAGE,
         loader: { provide: TranslateLoader, useFactory: httpLoaderFactory, deps: [HttpClient, API_BASE_URL] },
         missingTranslationHandler: { provide: MissingTranslationHandler, useClass: LogMissing }
       })
