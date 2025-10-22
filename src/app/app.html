@@ -1,5 +1,5 @@
 <div class="app-shell">
-  <app-navigation [isOpen]="isNavOpen"></app-navigation>
+  <app-navigation [isOpen]="isNavOpen" (navigationClosed)="onNavigationClosed()"></app-navigation>
   <div class="content-wrapper">
     <header class="app-header">
       <div class="header-content">
@@ -15,7 +15,11 @@
           <span class="sr-only">Ava või sulge menüü</span>
         </button>
         <a aria-label="edu.ee" class="logo" href="/">
-          <img aria-hidden="true" alt="edu.ee logo" src="/edu_logo.svg">
+          @if (themeService.theme() === 'dark') {
+            <img class="logo-dark" aria-hidden="true" alt="edu.ee logo" src="/edu_logo_dark.svg">
+          } @else {
+            <img class="logo-light" aria-hidden="true" alt="edu.ee logo" src="/edu_logo.svg">
+          }
         </a>
       </div>
     </header>

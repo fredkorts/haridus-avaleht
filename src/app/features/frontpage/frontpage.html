@@ -34,7 +34,7 @@
           }
         </header> -->
 
-        @if (vm.news) {
+        <!-- @if (vm.news) {
           <div class="news-block">
             <h2>{{ 'news.label' | translate }}</h2>
             @if (vm.news.routed) {
@@ -43,7 +43,7 @@
               <a [href]="vm.news.url">{{ vm.news.title }}</a>
             }
           </div>
-        }
+        } -->
 
         @if (vm.descriptionHtml) {
           <div class="description-block" [innerHTML]="vm.descriptionHtml"></div>
@@ -293,7 +293,7 @@
       </div>
       <div class="section-inner">
         <div class="footer-content">
-          <h2 class="footer-title">{{ vm.title }}</h2>
+          <!-- <h2 class="footer-title">{{ vm.title }}</h2> -->
           @if (vm.contact; as c) {
             <div class="footer-contact">
               @if (c.name) { 

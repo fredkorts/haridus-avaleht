@@ -24,6 +24,7 @@
   text-align: center;
   padding: 1.25rem 1.5rem;
   color: inherit;
+  text-decoration: none;
 
   @include mixins.card-surface();
   @include mixins.card-hover(-2px);

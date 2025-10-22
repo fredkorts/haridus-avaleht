@@ -4,6 +4,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LANGUAGE_STORAGE_KEY } from './core/constants/storage.constants';
 import { NavigationComponent } from './core/components/navigation/navigation';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +17,17 @@ export class AppComponent {
   @ViewChild(NavigationComponent) navigation?: NavigationComponent;
   private t = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  protected themeService = inject(ThemeService);
   
   isNavOpen = false;
   
   toggleNav(): void {
     this.isNavOpen = !this.isNavOpen;
     this.navigation?.toggleNav();
+  }
+
+  onNavigationClosed(): void {
+    this.isNavOpen = false;
   }
   constructor() {
     const fallback = 'et';

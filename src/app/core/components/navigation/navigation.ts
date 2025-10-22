@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, computed, inject } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter, computed, inject, effect, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
@@ -12,15 +12,30 @@ import { ThemeService } from '../../services/theme.service';
 })
 export class NavigationComponent {
   @Input() isOpen = false;
+  @Output() navigationClosed = new EventEmitter<void>();
   private readonly mobileBreakpoint = 1025;
-  private readonly themeService = inject(ThemeService);
+  protected readonly themeService = inject(ThemeService);
   private readonly translate = inject(TranslateService);
 
-  protected readonly themeLabel = computed(() =>
-    this.themeService.theme() === 'dark' 
-      ? this.translate.instant('dark_mode.enable')
-      : this.translate.instant('dark_mode.disable')
-  );
+  // Signal that updates when translations or theme changes
+  protected readonly themeLabel = signal('');
+
+  constructor() {
+    // Update theme label when translations load or theme changes
+    effect(() => {
+      const isDark = this.themeService.theme() === 'dark';
+      // Show what theme you'll switch TO, not current theme
+      const key = isDark ? 'dark_mode.disable' : 'dark_mode.enable';
+      this.themeLabel.set(this.translate.instant(key));
+    });
+
+    // Re-compute label when language changes
+    this.translate.onLangChange.subscribe(() => {
+      const isDark = this.themeService.theme() === 'dark';
+      const key = isDark ? 'dark_mode.disable' : 'dark_mode.enable';
+      this.themeLabel.set(this.translate.instant(key));
+    });
+  }
 
   toggleNav(): void {
     this.isOpen = !this.isOpen;
@@ -33,6 +48,7 @@ export class NavigationComponent {
   handleLinkSelection(): void {
     if (this.isMobileViewport()) {
       this.isOpen = false;
+      this.navigationClosed.emit();
     }
   }
 
