@@ -1,8 +1,12 @@
 import { Component, HostListener, Input, Output, EventEmitter, inject, effect, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterLinkActiveOptions } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
 import { HOME_NAVIGATION_ITEM, PRIMARY_NAVIGATION_ARIA_LABEL, TEST_NAVIGATION_ITEM } from '../../constants/navigation.constants';
+
+type RouterLinkActiveOptions = {
+  exact?: boolean;
+};
 
 @Component({
   selector: 'app-navigation',
