@@ -5,6 +5,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LANGUAGE_STORAGE_KEY } from './core/constants/storage.constants';
 import { NavigationComponent } from './core/components/navigation/navigation';
 import { ThemeService } from './core/services/theme.service';
+import { APP_SHELL_COPY } from './core/constants/app-shell.constants';
+import { DEFAULT_LANGUAGE, FALLBACK_LANGUAGE } from './core/constants/i18n.constants';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +20,8 @@ export class AppComponent {
   private t = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
   protected themeService = inject(ThemeService);
-  
+  protected readonly appShellCopy = APP_SHELL_COPY;
+
   isNavOpen = false;
   
   toggleNav(): void {
@@ -30,11 +33,12 @@ export class AppComponent {
     this.isNavOpen = false;
   }
   constructor() {
-    const fallback = 'et';
+    const fallback = FALLBACK_LANGUAGE;
     const stored = this.readStoredLang();
 
-    this.t.addLangs([fallback]);
-    this.t.setDefaultLang(fallback);
+    const supportedLanguages = Array.from(new Set([DEFAULT_LANGUAGE, FALLBACK_LANGUAGE]));
+    this.t.addLangs(supportedLanguages);
+    this.t.setDefaultLang(DEFAULT_LANGUAGE);
     this.t.use(stored || fallback);
 
     this.t.onLangChange

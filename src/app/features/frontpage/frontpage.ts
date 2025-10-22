@@ -8,6 +8,14 @@ import { FrontpageService } from '../../core/services/frontpage.service';
 import { FrontpageVM } from '../../core/models/frontpage.types';
 import { mapFrontpage } from './frontpage.mapper';
 import { LANGUAGE_STORAGE_KEY } from '../../core/constants/storage.constants';
+import {
+  FRONTPAGE_ERROR_FALLBACK_MESSAGE,
+  FRONTPAGE_LOAD_ERROR_KEY,
+  FRONTPAGE_LOADING_FALLBACK_MESSAGE,
+  FRONTPAGE_LOG_NAMESPACE,
+  FRONTPAGE_PLACEHOLDER_IMAGE_ALT,
+  IMAGE_PLACEHOLDER_DATA_URL,
+} from './frontpage.constants';
 
 type FrontpageState =
   | { status: 'loading' }
@@ -28,6 +36,12 @@ export class FrontpageComponent {
 
   @ViewChild('servicesScroller') servicesScroller?: ElementRef<HTMLElement>;
 
+  protected readonly loadErrorKey = FRONTPAGE_LOAD_ERROR_KEY;
+  protected readonly loadErrorFallbackMessage = FRONTPAGE_ERROR_FALLBACK_MESSAGE;
+  protected readonly loadingFallbackMessage = FRONTPAGE_LOADING_FALLBACK_MESSAGE;
+  protected readonly placeholderImage = IMAGE_PLACEHOLDER_DATA_URL;
+  protected readonly placeholderImageAlt = FRONTPAGE_PLACEHOLDER_IMAGE_ALT;
+
   readonly vmState$: Observable<FrontpageState> = this.svc.getFrontpage().pipe(
     map(mapFrontpage),
     map(vm => ({
@@ -39,8 +53,8 @@ export class FrontpageComponent {
     tap(vm => this.syncLanguages(vm.languages)),
     map<FrontpageVM, FrontpageState>(vm => ({ status: 'loaded', data: vm })),
     catchError(err => {
-      console.error('[frontpage] failed to load content', err);
-      return of<FrontpageState>({ status: 'error', error: 'frontpage.errors.loadFailed' });
+      console.error(`${FRONTPAGE_LOG_NAMESPACE} failed to load content`, err);
+      return of<FrontpageState>({ status: 'error', error: FRONTPAGE_LOAD_ERROR_KEY });
     }),
     startWith<FrontpageState>({ status: 'loading' }),
     shareReplay({ bufferSize: 1, refCount: false })

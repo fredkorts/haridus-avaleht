@@ -9,16 +9,16 @@
           (click)="toggleNav()"
           [attr.aria-expanded]="isNavOpen"
           aria-controls="primary-navigation"
-          aria-label="Vaheta menüü olekut"
+          [attr.aria-label]="appShellCopy.navToggleAriaLabel"
         >
           <span class="toggle-icon" [class.is-open]="isNavOpen" aria-hidden="true"></span>
-          <span class="sr-only">Ava või sulge menüü</span>
+          <span class="sr-only">{{ appShellCopy.navToggleSrLabel }}</span>
         </button>
-        <a aria-label="edu.ee" class="logo" href="/">
+        <a [attr.aria-label]="appShellCopy.logoAriaLabel" class="logo" href="/">
           @if (themeService.theme() === 'dark') {
-            <img class="logo-dark" aria-hidden="true" alt="edu.ee logo" src="/edu_logo_dark.svg">
+            <img class="logo-dark" aria-hidden="true" [attr.alt]="appShellCopy.logoAltText" src="/edu_logo_dark.svg">
           } @else {
-            <img class="logo-light" aria-hidden="true" alt="edu.ee logo" src="/edu_logo.svg">
+            <img class="logo-light" aria-hidden="true" [attr.alt]="appShellCopy.logoAltText" src="/edu_logo.svg">
           }
         </a>
       </div>

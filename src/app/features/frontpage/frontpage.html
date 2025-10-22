@@ -123,7 +123,7 @@
                 <article class="slides-card">
                   <div class="slides-card__image">
                     @if (s.img) { 
-                      <img [src]="s.img" [alt]="s.alt || s.title" (error)="$any($event.target).src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23f5f5f5%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-family=%22Arial,sans-serif%22 font-size=%2214%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3EPilt puudub%3C/text%3E%3C/svg%3E'" /> 
+                    <img [src]="s.img" [alt]="s.alt || s.title" (error)="$any($event.target).src = placeholderImage" />
                     } @else {
                       <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <rect fill="#f5f5f5" width="200" height="200"/>
@@ -225,7 +225,7 @@
               <div class="link-card__wrapper">
                 <div class="link-card__image">
                   @if (l.img) { 
-                    <img [src]="l.img" [alt]="l.alt || l.title || 'Illustratsioon'" (error)="$any($event.target).src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23f5f5f5%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-family=%22Arial,sans-serif%22 font-size=%2214%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3EPilt puudub%3C/text%3E%3C/svg%3E'" />
+                    <img [src]="l.img" [alt]="l.alt || l.title || placeholderImageAlt" (error)="$any($event.target).src = placeholderImage" />
                   } @else {
                     <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                       <rect fill="#f5f5f5" width="200" height="200"/>
@@ -308,11 +308,11 @@
     </footer>
   } @else if (state.status === 'error') {
     <section class="state state-error" role="alert">
-      <p>{{ ('frontpage.errors.loadFailed' | translate) || 'Sisuhaldusest ei õnnestunud andmeid laadida.' }}</p>
+      <p>{{ (loadErrorKey | translate) || loadErrorFallbackMessage }}</p>
     </section>
   } @else {
     <section class="state state-loading" aria-busy="true">
-      <p>{{ ('common.loading' | translate) || 'Laadimine…' }}</p>
+      <p>{{ ('common.loading' | translate) || loadingFallbackMessage }}</p>
     </section>
   }
 }
