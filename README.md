@@ -62,19 +62,34 @@ The application will be available at `http://localhost:4200/` with live reload e
 ```
 src/app/
 ├── core/
+│   ├── components/
+│   │   └── navigation/             # Navigation component
+│   ├── config/
+│   │   └── api-tokens.ts           # API configuration tokens
+│   ├── constants/
+│   │   ├── app-shell.constants.ts  # App shell constants
+│   │   ├── i18n.constants.ts       # Internationalization constants
+│   │   ├── navigation.constants.ts # Navigation configuration
+│   │   └── storage.constants.ts    # Storage keys and constants
 │   ├── models/
 │   │   └── frontpage.types.ts      # API types + ViewModel definitions
 │   └── services/
-│       └── frontpage.service.ts    # HttpClient service for /api/frontpage
+│       ├── frontpage.service.ts    # HttpClient service for /api/frontpage
+│       └── theme.service.ts        # Theme management service
 ├── features/
-│   └── frontpage/
-│       ├── frontpage.ts            # Standalone component with view-state logic
-│       ├── frontpage.html          # Template using @if/@for/@switch
-│       ├── frontpage.scss          # Responsive, accessible styles
-│       └── frontpage.mapper.ts     # API → ViewModel normalization
+│   ├── frontpage/
+│   │   ├── frontpage.ts            # Standalone component with view-state logic
+│   │   ├── frontpage.html          # Template using @if/@for/@switch
+│   │   ├── frontpage.scss          # Responsive, accessible styles
+│   │   ├── frontpage.mapper.ts     # API → ViewModel normalization
+│   │   ├── frontpage.constants.ts  # Frontpage-specific constants
+│   │   └── styles/                 # Component-specific styles
+│   └── test-page/                  # Test page feature
+├── app.ts                          # Root component; initializes i18n with 'et'
+├── app.html                        # Root template
+├── app.scss                        # Global styles
 ├── app.routes.ts                   # Route config: { path: '', component: Frontpage }
-├── app.config.ts                   # Providers: router, HttpClient, TranslateModule
-└── app.ts                          # Root component; initializes i18n with 'et'
+└── app.config.ts                   # Providers: router, HttpClient, TranslateModule
 ```
 
 ## Development Commands
