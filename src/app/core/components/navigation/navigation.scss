@@ -67,7 +67,7 @@
   // Desktop styles (≥1025px) - always visible sidebar
   @media (min-width: 1025px) {
     width: 96px;
-    padding: 80px 4px 1rem 4px;
+    padding: 0 4px 1rem 4px;
 
     .navigation__list {
       gap: 0.5rem;
@@ -92,7 +92,8 @@
       border-radius: 4px;
       word-wrap: break-word;
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         background-color: var(--color-surface-muted);
         color: var(--color-primary);
       }
@@ -174,7 +175,8 @@
       font-size: 1rem;
       transition: background-color 0.2s ease, color 0.2s ease;
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         background-color: var(--color-surface-muted);
         color: var(--color-primary);
       }

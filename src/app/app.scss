@@ -35,7 +35,6 @@
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
-  max-width: 1160px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -53,7 +52,8 @@
   position: relative;
   z-index: 1200;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba(0, 0, 0, 0.05);
   }
 

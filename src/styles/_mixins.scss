@@ -45,6 +45,7 @@
   color: var(--color-primary);
   text-decoration: none;
   font-weight: $weight;
+  font-size: 0.875rem;
   transition: color var(--transition-base), text-decoration-color var(--transition-base);
 
   &:hover,

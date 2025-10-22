@@ -6,8 +6,9 @@
         routerLink="/"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
+        #homeLink="routerLinkActive"
+        [attr.aria-current]="homeLink.isActive ? 'page' : null"
         (click)="handleLinkSelection()"
-        aria-current="page"
       >
         <span class="navigation__button-title">
           <span class="navigation__button-icon">
@@ -24,7 +25,9 @@
       <a 
         class="navigation__button"
         routerLink="/test" 
-        routerLinkActive="active" 
+        routerLinkActive="active"
+        #testLink="routerLinkActive"
+        [attr.aria-current]="testLink.isActive ? 'page' : null"
         (click)="handleLinkSelection()"
       >
         <span class="navigation__button-title">
@@ -43,7 +46,7 @@
     </li>
   </ul>
   <div class="nav-actions">
-    <button type="button" class="theme-toggle" (click)="toggleTheme()">
+    <button type="button" class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="themeLabel()">
       @if (themeService.theme() === 'light') {
         <!-- Moon icon for light theme (click to go dark) -->
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon">
