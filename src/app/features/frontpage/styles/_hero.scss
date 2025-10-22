@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins' as mixins;
+
 .hero-section {
   background-color: var(--color-accent);
   padding: 3rem 0;
@@ -14,10 +16,26 @@
       color: var(--color-heading);
     }
   }
+  .top-block {
+    flex-direction: row-reverse;
+
+    @include mixins.respond-below(lg) {
+      flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+    }
+  }
 }
 
 .news-block {
   margin-bottom: 2rem;
+  border-left: 5px solid var(--color-surface-muted);
+  padding-left: 1rem;
+
+  @include mixins.respond-below(lg) {
+    width: 100%;
+    max-width: 800px;
+  }
   
   h2 {
     margin: 0 0 0.75rem;
@@ -43,6 +61,11 @@
   line-height: 1.6;
   color: var(--color-text);
   max-width: 800px;
+  padding: 0 2rem;
+
+  @include mixins.respond-below(lg) {
+    padding: 0;
+  }
   
   p {
     color: var(--color-text);

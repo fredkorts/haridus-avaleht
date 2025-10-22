@@ -3,7 +3,7 @@
     @let vm = state.data;
     
     <section class="hero-section">
-      <div class="section-inner">
+      <div class="section-inner top-block">
         <!-- <header>
           <div class="header__top">
             <h1>{{ vm.title }}</h1>
@@ -22,19 +22,9 @@
               </nav>
             }
           </div>
-          @if (vm.contact; as c) {
-            <div aria-label="Kontakt" class="contact">
-              <h2>{{ ('frontpage.contact' | translate) || 'Kontakt' }}</h2>
-              <address>
-                @if (c.name) { <div>{{ c.name }}</div> }
-                @if (c.email) { <div><a [href]="'mailto:' + c.email">{{ c.email }}</a></div> }
-                @if (c.phone) { <div><a [href]="'tel:' + c.phone">{{ c.phone }}</a></div> }
-              </address>
-            </div>
-          }
         </header> -->
 
-        <!-- @if (vm.news) {
+        @if (vm.news) {
           <div class="news-block">
             <h2>{{ 'news.label' | translate }}</h2>
             @if (vm.news.routed) {
@@ -43,7 +33,7 @@
               <a [href]="vm.news.url">{{ vm.news.title }}</a>
             }
           </div>
-        } -->
+        }
 
         @if (vm.descriptionHtml) {
           <div class="description-block" [innerHTML]="vm.descriptionHtml"></div>
