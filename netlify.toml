@@ -1,8 +1,13 @@
 [build]
   command = "npm ci && npm run build"
-  publish = "dist/haridus-avaleht"  # <- adjust to your actual outputPath
+  publish = "dist/haridus-avaleht"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[plugins]
+  # disable auto Angular runtime
+  package = "@netlify/angular-runtime"
+  disabled = true
