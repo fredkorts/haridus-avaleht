@@ -4,10 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
 import { HOME_NAVIGATION_ITEM, PRIMARY_NAVIGATION_ARIA_LABEL, TEST_NAVIGATION_ITEM } from '../../constants/navigation.constants';
 
-type RouterLinkActiveOptions = {
-  exact?: boolean;
-};
-
 @Component({
   selector: 'app-navigation',
   standalone: true,
@@ -27,8 +23,6 @@ export class NavigationComponent {
   protected readonly primaryNavLabel = PRIMARY_NAVIGATION_ARIA_LABEL;
   protected readonly homeNav = HOME_NAVIGATION_ITEM;
   protected readonly testNav = TEST_NAVIGATION_ITEM;
-  protected readonly homeNavActiveOptions: RouterLinkActiveOptions | undefined =
-    this.homeNav.exact ? { exact: this.homeNav.exact } : undefined;
 
   constructor() {
     // Update theme label when translations load or theme changes

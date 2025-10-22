@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
-import { TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { provideRouter } from '@angular/router';
 import { FrontpageComponent } from './frontpage';
 import { FrontpageService } from '../../core/services/frontpage.service';
@@ -23,11 +23,15 @@ const TRANSLATIONS = {
 describe('FrontpageComponent', () => {
   async function setup(response$: ReturnType<FrontpageService['getFrontpage']>) {
     await TestBed.configureTestingModule({
-      imports: [FrontpageComponent],
+      imports: [
+        FrontpageComponent,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: StaticTranslateLoader }
+        })
+      ],
       providers: [
         provideRouter([]),
-        { provide: FrontpageService, useValue: { getFrontpage: () => response$ } },
-        { provide: TranslateLoader, useClass: StaticTranslateLoader }
+        { provide: FrontpageService, useValue: { getFrontpage: () => response$ } }
       ]
     }).compileComponents();
 
@@ -63,10 +67,19 @@ describe('FrontpageComponent', () => {
   });
 
   it('shows the error state when loading fails', async () => {
+    // Suppress expected console.error output in this test
+    const consoleErrorSpy = spyOn(console, 'error');
+    
     const { fixture } = await setup(throwError(() => new Error('network error')));
 
     const errorSection: HTMLElement | null = fixture.nativeElement.querySelector('.state-error');
     expect(errorSection).not.toBeNull();
     expect(errorSection?.textContent).toContain('Failed to load frontpage');
+    
+    // Verify error was logged (but suppressed from console)
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '[frontpage] failed to load content',
+      jasmine.any(Error)
+    );
   });
 });

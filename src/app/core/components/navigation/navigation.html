@@ -5,7 +5,7 @@
         class="navigation__button"
         [routerLink]="homeNav.route"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="homeNavActiveOptions"
+        [routerLinkActiveOptions]="{ exact: true }"
         #homeLink="routerLinkActive"
         [attr.aria-current]="homeLink.isActive ? homeNav.ariaCurrent ?? null : null"
         (click)="handleLinkSelection()"
