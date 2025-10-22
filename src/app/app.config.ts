@@ -16,16 +16,29 @@ class CustomTranslateLoader implements TranslateLoader {
   constructor(private http: HttpClient, private apiBaseUrl: string) {}
 
   getTranslation(lang: string): Observable<any> {
+    // Check if we've already cached this language
     if (!this.cache.has(lang)) {
+      const baseUrl = this.apiBaseUrl.replace(/\/api$/, ''); // Remove /api suffix
+      
+      // Try language-specific endpoint first, fall back to general endpoint
       const request$ = this.http
-        .get(`${this.apiBaseUrl}/translations`, { params: { _format: 'json', lang } })
+        .get(`${baseUrl}/translations`, { params: { _format: 'json', lang } })
         .pipe(
           catchError(err => {
-            console.error('[i18n] failed to load translations', lang, err);
-            return of({});
+            // If language-specific request fails, try without lang parameter
+            console.warn(`[i18n] failed to load translations for ${lang}, trying without lang parameter`, err);
+            return this.http
+              .get(`${baseUrl}/translations`, { params: { _format: 'json' } })
+              .pipe(
+                catchError(fallbackErr => {
+                  console.error('[i18n] failed to load translations', fallbackErr);
+                  return of({});
+                })
+              );
           }),
-          shareReplay({ bufferSize: 1, refCount: false })
+          shareReplay({ bufferSize: 1, refCount: false }) 
         );
+      
       this.cache.set(lang, request$);
     }
 
@@ -49,6 +62,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'et',
+        fallbackLang: 'et',
         loader: { provide: TranslateLoader, useFactory: httpLoaderFactory, deps: [HttpClient, API_BASE_URL] },
         missingTranslationHandler: { provide: MissingTranslationHandler, useClass: LogMissing }
       })

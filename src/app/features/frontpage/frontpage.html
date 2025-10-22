@@ -36,7 +36,7 @@
 
         @if (vm.news) {
           <div class="news-block">
-            <h2>{{ 'frontpage.news' | translate }}</h2>
+            <h2>{{ 'news.label' | translate }}</h2>
             @if (vm.news.routed) {
               <a [routerLink]="vm.news.url">{{ vm.news.title }}</a>
             } @else {
@@ -73,7 +73,7 @@
               @if (ref.link) {
                 @if (ref.link.routed) {
                   <a class="reference-block__link" [routerLink]="ref.link.url">
-                    {{ ref.link.title || ('buttons.read_more' | translate) }}
+                    {{ ref.link.title || ('button.read_more' | translate) }}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon">
                       <path d="M9 18l6-6-6-6"></path>
                     </svg>
@@ -85,7 +85,7 @@
                     [attr.target]="ref.link.url.startsWith('http') ? '_blank' : null"
                     rel="noopener"
                   >
-                    {{ ref.link.title || ('buttons.read_more' | translate) }}
+                    {{ ref.link.title || ('button.read_more' | translate) }}
                     @if (ref.link.url.startsWith('http')) {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon link-icon--external">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -114,7 +114,7 @@
           </svg>
         </div>
         <div class="section-inner">
-          <h2>{{ 'frontpage.services' | translate }}</h2>
+          <h2>{{ 'home.services_title' | translate }}</h2>
           <div class="slides-container">
           <div class="slides-wrapper">
             <button 
@@ -147,7 +147,7 @@
                     @if (s.link) {
                       @if (s.link.routed) {
                         <a class="slides-card__link" [routerLink]="s.link.url">
-                          {{ s.link.title || ('buttons.read_more' | translate) }}
+                          {{ s.link.title || ('button.read_more' | translate) }}
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon">
                             <path d="M9 18l6-6-6-6"></path>
                           </svg>
@@ -159,7 +159,7 @@
                           [attr.target]="s.link.url.startsWith('http') ? '_blank' : null"
                           rel="noopener"
                         >
-                          {{ s.link.title || ('buttons.read_more' | translate) }}
+                          {{ s.link.title || ('button.read_more' | translate) }}
                           @if (s.link.url.startsWith('http')) {
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon link-icon--external">
                               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -203,7 +203,6 @@
           </svg>
         </div>
         <div class="section-inner">
-          <h2>{{ 'frontpage.topics' | translate }}</h2>
           <div class="topics-cards">
           @for (t of vm.topics; track t.url) {
             <div class="topics-card">
@@ -230,7 +229,6 @@
           </svg>
         </div>
         <div class="section-inner">
-          <h2>{{ 'frontpage.links' | translate }}</h2>
           <div class="link-cards">
           @for (l of vm.links; track l.link?.url ?? l.title ?? $index) {
             <div class="link-card">
@@ -251,7 +249,7 @@
                   @if (l.link) {
                     @if (l.link.routed) {
                       <a class="link-card__link" [routerLink]="l.link.url">
-                        {{ l.link.title || ('buttons.read_more' | translate) }}
+                        {{ l.link.title || ('button.read_more' | translate) }}
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon">
                           <path d="M9 18l6-6-6-6"></path>
                         </svg>
@@ -263,7 +261,7 @@
                         [attr.target]="l.link.url.startsWith('http') ? '_blank' : null"
                         rel="noopener"
                       >
-                        {{ l.link.title || ('buttons.read_more' | translate) }}
+                        {{ l.link.title || ('button.read_more' | translate) }}
                         @if (l.link.url.startsWith('http')) {
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="link-icon link-icon--external">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
