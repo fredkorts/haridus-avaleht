@@ -62,9 +62,17 @@
   color: var(--color-text);
   max-width: 800px;
   padding: 0 2rem;
+  flex: 1; // Allow it to grow and fill available space
+
+  // When it's the only child (no news-block), center it and give it more space
+  &:only-child {
+    max-width: 1200px;
+    width: 100%;
+  }
 
   @include mixins.respond-below(lg) {
     padding: 0;
+    max-width: 800px; // Constrain on mobile even when alone
   }
   
   p {
